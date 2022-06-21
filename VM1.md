@@ -122,9 +122,10 @@ Le premier FLAG réside dans le protocole utilisé sur le port 13337.
 ***
 #### 80 TCP
 
-On commance rappidement l'analyse par le serveru web sur le port 80.
+On commence rapidement l'analyse par le serveur web sur le port 80.
 
-Une rappide analyse avec DIRB et son dictionaire standard nous donne :
+Une rapide analyse avec DIRB et son dictionnaire standard nous donne :
+
 
 ***Mapping de l'arborecance du serveur web***
 ```bash
@@ -157,9 +158,9 @@ END_TIME: Tue Jun  7 10:22:47 2022
 DOWNLOADED: 4612 - FOUND: 3
 ```
 
-Les quelques fichiers et le dossier semblent interssants.
+Les quelques fichiers et le dossier semblent intéressants.
 
-Je commance par le fichier Robot.txt:
+Je commence par le fichier Robot.txt : 
 
 ***Annalyse de `robot.txt`***
 ```bash
@@ -180,10 +181,9 @@ They're Robots Morty! It's ok to shoot them! They're just Robots!
 /cgi-bin/*
                                                                                                                    
 ```
-Nous pouvons extraire quelques information sur les fichiers du dossier au quel nous n'avions pas accès.
+Nous pouvons extraire quelques informations sur les fichiers du dossier auquel nous n'avions pas accès.
 
-
-Les fichier dans cgi-sont prometeurs :
+Les fichiers dans cgi-sont prometteurs ;
 
 ***Annalyse des `.cgi***
 ```bash 
@@ -228,16 +228,14 @@ Exploration avec un navigateur WEB
 
 ![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-164842.png)
 
-Il est fort probable que cette page soient basée sur l'utilisation de la commande `TraceRoute`
+Il est fort probable que cette page soit basée sur l'utilisation de la commande `Traceroute`
 
 
 ![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-165118.png)
-
-La page est vulnerable aux injections de commandes, nous avons accès a l'utilisateur apache. 
+La page est vulnérable aux injections de commandes, nous avons accès à l'utilisateur apache. 
 C'est noté dans un coin et je reviendrais dessus.
 
-
-L'annlyse du dossier password donne ce résultat :
+L'analyse du dossier password donne ce résultat ;
 
 ![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-163214.png)
 
@@ -330,20 +328,21 @@ Permission Denied.
 **Identification du Flag n°4 :**
 `FLAG{Flip the pickle Morty!} - 10 Points`
 
-Il semble que l'utilisateur ne puisse pas faire grand chose, je laisse rappidement cette pise de coté.
+Il semble que l'utilisateur ne puisse pas faire grand-chose, je laisse rapidement cette piser de coté.
 ***
 
 
 #### tracertool.cgi
-L'ensemble des ports on étés explorés, et il ne semble pas y avoir de faille connue et exploitable dans les version des services utilisée. 
+L'ensemble des ports ont été explorés, et il ne semble pas y avoir de faille connue et exploitable dans les version des services utilisés. 
 
-Je retourne donc sur ma piste laisée de côté, l'injection de commandes.
+Je retourne donc sur ma piste laissée de côté, l'injection de commandes.
 
 Après un peu d'exploration, je constate que la commande `cat` a été remplacée.
 
 
-Je récupere les utilisateur dans le fichier `/etc/passwd` à l'aide de less.
-Après extarction, il semble qu'il existe 3 login utilisable, RickSanchez, Morty, Summer,
+Je récupère les utilisateurs dans le /etc/passwd à l'aide de les.
+Après extraction, il semble qu'il existe 3 logins utilisables, Rick Sanchez, Morty, Summer;
+
 
 ***Extarcation et identification des users***
 ```bash
@@ -357,10 +356,9 @@ Morty:x:1001:1001::/home/Morty:/bin/bash
 Summer:x:1002:1002::/home/Summer:/bin/bash
 
 ```
+Avant de tenter une brute force complète sur les utilisateurs, nous allons tenter de tester tous les couples mots de passe / logins que nous avons.
 
-Avant de tenter un brutforce complet sur les utilisateurs, nous allons tenter des tester des tous les couples mot de passe / login que nous avons.
-
-J'utilise l'assistant d'Hydra ce qui me coute un essais pour cause de faute de frape
+J'utilise l'assistant d'Hydra ce qui me coute un essai pour cause de faute de frappe.
 
 ***Utilisation d'hydra sur le l'accès SSH***
 ```bash
@@ -461,7 +459,7 @@ FLAG{Get off the high road Summer!} - 10 Points
 **Identification du Flag n°5 **
 `FLAG{Get off the high road Summer!} - 10 Points`
 
-Il me semble avoir vu un serveur ftp, je vais l'expplorer.
+Il me semble avoir vu un serveur ftp, je vais l'explorer.
 
 ```bash
 [Summer@localhost ~]$ cd /var/ftp/
@@ -473,7 +471,7 @@ drwxr-xr-x. 22 root root 4096 Aug 21  2017 ..
 drwxr-xr-x.  2 root root    6 Feb 12  2017 pub
 [Summer@localhost ftp]$ 
 ```
-Nous avons trouvé un flag de plus et avoir encore une fois affronter ce terible `cat`, nous avons 
+Nous avons trouvé un flag de plus et avoir encore une fois affronté ce terrible `cat`, nous avons 
 
 ```bash
 [Summer@localhost ftp]$ less FLAG.txt | tail -10
@@ -482,7 +480,7 @@ FLAG{Whoa this is unexpected} - 10 Points
 
 l'exploration du dossier `pub` ne donne rien.
 
-Après de longues recherches il semble que Summer ait accès au /home de tous les utilisateurs
+Après de rapides recherches il semble que Summer ait accès au /home de tous les utilisateurs
 
 ```bash
 [Summer@localhost home]$ ls -la
@@ -494,7 +492,7 @@ drwxr-xr-x.  4 RickSanchez RickSanchez 113 Sep 21  2017 RickSanchez
 drwx------.  2 Summer      Summer       99 Jun  8 03:31 Summer
 ```
 
-Il semble y avoir un executable "safe" dans le home de Rick 
+Il semble y avoir un exécutable "safe" dans le home de Rick 
 
 ```
 [Summer@localhost RICKS_SAFE]$ ls -la
@@ -508,10 +506,10 @@ safe: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, i
 
 Dans le doute, je le garde sous la main, mais ne le lance pas.
 
-Dans le dossier de morty nous avons deux fichier une archive avec un mot de passe et une image, 
+Dans le dossier de mort nous avons deux fichiers une archive avec un mot de passe et une image; 
 
 
-L'immage semble comropue.
+l'image semble corrompue.
 
 Dans le fichier nous avons
 ```
@@ -537,7 +535,7 @@ Dans le fichier nous avons
 ```
 Password : `Meeseek`
 
-Impossible de dezipper l'archive car Morty en est le propietaire, heureusement après copy, dans le `homedir` nous somme bon.
+Impossible de dézipper l'archive car Morty en est le propriétaire, heureusement après copy, dans l' nous sommes bons.
 
 
 ```
@@ -595,7 +593,7 @@ One of the words in my old bands name.� @
 ***Identification du Flag n°7***
 `FLAG{And Awwwaaaaayyyy we Go!} - 20 Points`
 
-Petite enquette en OSINT pour trouver le nom du groupe de Rick.
+Petite enquête en OSINT pour trouver le nom du groupe de Rick.
 
 
 
@@ -618,7 +616,7 @@ for letter in string.ascii_uppercase:
 ```
 
 
-Utilisation  d'hydra pour chercher a passer en SSH, dans le doute on va tester tous les mots de passe sur `root` et sur `RickSanchez`
+Utilisation  d'hydra pour chercher à passer en SSH, dans le doute on va tester tous les mots de passe sur `root` et sur `RickSanchez`
 
 ```bash
 └─$ hydra -L /home/kali/Documents/Cours/Rickdiculously/script/users -P /home/kali/Documents/Cours/Rickdiculously/script/passwords -u -s 22222  10.0.2.4 ssh -t 4
@@ -643,7 +641,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2022-06-07 19:26:
 ```
 
 
-Connextion au travers de RickSanchez en ssh
+Connexion au travers de RickSanchez en ssh
 
 ***Passage en Su grace a sudo***
 

