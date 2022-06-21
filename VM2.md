@@ -523,6 +523,10 @@ root@vtcsec:/tmp# id
 id
 uid=0(root) gid=0(root) groups=0(root)
 ``` 
+![](https://imgur.com/aVt99nU.png) 
+
+(Le screen ne date pas de quand j'ai fais la VM mais de la rédaction du rapport, les commandes passée dans le shell ne matches donc pas)
+
 Et me voila root.
 
 Il y'avait de nobreuses autres options notament : 
@@ -530,7 +534,6 @@ Il y'avait de nobreuses autres options notament :
 - Via certaine librairie libre en écriture, 
 - Via les crontabs
 - Via le SSH (BRUTE FORCE)
-
 
 ##
 
